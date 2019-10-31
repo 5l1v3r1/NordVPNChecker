@@ -2,7 +2,7 @@
 
 checker.py -b BASE -p PROXIES -t THREADS -s SORT BY YEARS (True/False) -pr PRINT GOODS IN CONSOLE (True/False)
 
-=====
+Options::
 usage: checker.py [-h] -b BASE -p PROXIES [-t THREADS] [-s SORT]
                   [-pg PRINT_GOODS]
 
@@ -17,4 +17,3 @@ optional arguments:
   -pg PRINT_GOODS, --print_goods PRINT_GOODS
                         Print goods
                         
-=====
