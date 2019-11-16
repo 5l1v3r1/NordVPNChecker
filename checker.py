@@ -126,7 +126,7 @@ class Checker:
                                 proxies={'https': f'{self.proxy_type}://{proxy}'},
                                 timeout=self.timeout)
             except KeyboardInterrupt:
-                return
+                os._exit(0)
             except requests.exceptions.Timeout:
                 self.connection_error += 1
                 self.setConsoleTitle()
@@ -162,7 +162,7 @@ class Checker:
                                         proxies={'https': f'{self.proxy_type}://{proxy}'},
                                         timeout=self.timeout)
                     except KeyboardInterrupt:
-                        return
+                        os._exit(0)
                     except requests.exceptions.Timeout:
                         self.connection_error += 1
                         self.setConsoleTitle()
@@ -239,7 +239,7 @@ class Checker:
             for _ in pool.imap_unordered(self.sender, self.combo_list):
                 pass
         except KeyboardInterrupt:
-            exit(0)
+            os._exit(0)
         print("Done!")
 
 
@@ -279,7 +279,8 @@ if __name__ == "__main__":
         '-to',
         '--timeout',
         help="Timeout in seconds",
-        required=False)
+        required=False,
+        type=float)
     args = vars(parser.parse_args())
     Checker(
         args['proxies'],
