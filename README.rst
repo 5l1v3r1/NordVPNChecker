@@ -1,7 +1,7 @@
 Usage
 =====
 
-checker.py -b BASE -p PROXIES -t THREADS -s SORT BY YEARS (True/False) -pr PRINT GOODS IN CONSOLE (True/False)
+checker.py -b BASE -p PROXIES -t THREADS -s SORT BY YEARS (True/False) -pg PRINT GOODS IN CONSOLE (True/False) -to TIMEOUT
 
 Options::
 
@@ -18,3 +18,4 @@ Options::
       -s SORT, --sort SORT  Sort subscribes by year
       -pg PRINT_GOODS, --print_goods PRINT_GOODS
                             Print goods
+      -to TIMEOUT, --timeout TIMEOUT Timeout in seconds
